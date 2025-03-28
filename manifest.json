@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Ctrl+Shift+C Listener",
+  "version": "1.0",
+  "description": "Shows an alert when Ctrl+Shift+C is pressed.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "commands": {
+    "show_alert_command": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C"
+      },
+      "description": "Show Ctrl+Shift+C pressed alert"
+    }
+  }
+}
