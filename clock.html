@@ -34,6 +34,26 @@
       .modal.closing {
         animation: slideUp 0.5s ease-out forwards;
       }
+      /* Dark mode styles */
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #222;
+        }
+        .modal {
+          background-color: #121212;
+          color: #f0f0f0;
+          box-shadow: 0 5px 25px rgba(255, 255, 255, 0.1);
+        }
+
+        .clock {
+          color: #f0f0f0 !important;
+        }
+
+        .date {
+          color: #ccc !important;
+        }
+      }
+
       @keyframes slideDown {
         0% {
           top: -100px;
