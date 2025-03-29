@@ -9,23 +9,91 @@ chrome.commands.onCommand.addListener(command => {
       // Ensure we found an active tab
       if (tabs && tabs.length > 0) {
         const activeTabId = tabs[0].id;
-
-        // Execute a script in the context of the active tab
-        chrome.scripting.executeScript({
-          target: { tabId: activeTabId }, // Target the active tab
-          func: showAlert, // Specify the function to execute
-        });
+        // chrome.action.openPopup();
+        chrome.scripting
+          .insertCSS({
+            target: { tabId: activeTabId },
+            files: ['clock.css'], // Create this file with the styles from clock.html
+          })
+          .then(() => {
+            // Then execute script to insert and control the modal
+            chrome.scripting.executeScript({
+              target: { tabId: activeTabId },
+              func: injectClockModal,
+            });
+          })
+          .catch(err => console.error('Error injecting CSS:', err));
       } else {
-        console.error('Could not find active tab.');
+        console.error('No active tab found');
       }
     });
   }
 });
 
-// This function will be injected and executed on the active page
-function showAlert() {
-  const date = new Date();
-  const hours = date.getHours();
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  alert(`Current time: ${hours}:${minutes}`);
+function injectClockModal() {
+  // Check if modal already exists - don't create multiple instances
+  if (document.getElementById('clockOverlay')) {
+    return;
+  }
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay';
+  overlay.id = 'clockOverlay';
+
+  const modal = document.createElement('div');
+  modal.className = 'modal';
+  modal.id = 'clockModal';
+
+  const clock = document.createElement('div');
+  clock.className = 'clock';
+  clock.id = 'clock';
+
+  const date = document.createElement('div');
+  date.className = 'date';
+  date.id = 'date';
+
+  // Assemble modal
+  modal.appendChild(clock);
+  modal.appendChild(date);
+  overlay.appendChild(modal);
+  document.body.appendChild(overlay);
+
+  // Update clock function
+  function updateClock() {
+    const now = new Date();
+
+    // Update time
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
+    clock.textContent = `${hours}:${minutes}:${seconds}`;
+
+    // Update date
+    const options = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    };
+    date.textContent = now.toLocaleDateString(undefined, options);
+  }
+
+  // Close modal function
+  function closeModal() {
+    modal.classList.add('closing');
+    overlay.classList.add('closing');
+    setTimeout(() => {
+      document.body.removeChild(overlay);
+    }, 500);
+  }
+  // Add event listeners
+  overlay.addEventListener('click', closeModal);
+  document.addEventListener('keydown', closeModal);
+
+  // Auto close after 5 seconds
+  setTimeout(closeModal, 5000);
+
+  // Initialize and update clock
+  updateClock();
+  setInterval(updateClock, 1000);
 }

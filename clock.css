@@ -1,0 +1,114 @@
+body {
+  margin: 0;
+  background-color: #f0f0f0;
+  font-family: Arial, sans-serif;
+}
+/* Modal styling */
+.modal {
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1000;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+  padding: 20px 40px;
+  min-width: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  animation: slideDown 0.5s ease-out forwards;
+}
+.modal.closing {
+  animation: slideUp 0.5s ease-out forwards;
+}
+/* Dark mode styles */
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #222;
+  }
+  .modal {
+    background-color: #121212;
+    color: #f0f0f0;
+    box-shadow: 0 5px 25px rgba(255, 255, 255, 0.1);
+  }
+
+  .clock {
+    color: #f0f0f0 !important;
+  }
+
+  .date {
+    color: #ccc !important;
+  }
+}
+
+@keyframes slideDown {
+  0% {
+    top: -100px;
+    opacity: 0;
+  }
+  100% {
+    top: 15%;
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  0% {
+    top: 15%;
+    opacity: 1;
+  }
+  100% {
+    top: -100px;
+    opacity: 0;
+  }
+}
+
+/* Overlay background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 999;
+  animation: fadeIn 0.5s ease-out forwards;
+}
+.modal-overlay.closing {
+  animation: fadeOut 0.5s ease-out forwards;
+}
+
+.clock {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.date {
+  font-size: 1.2rem;
+  text-align: center;
+  margin-bottom: 15px;
+  color: #666;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
