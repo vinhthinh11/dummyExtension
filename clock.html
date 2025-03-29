@@ -14,27 +14,79 @@
         background-color: #f0f0f0;
         font-family: Arial, sans-serif;
       }
+      /* Modal styling */
+      .modal {
+        position: fixed;
+        top: 15%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        padding: 20px 40px;
+        min-width: 300px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: slideDown 0.5s ease-out forwards;
+      }
+      .modal.closing {
+        animation: slideUp 0.5s ease-out forwards;
+      }
+      @keyframes slideDown {
+        0% {
+          top: -100px;
+          opacity: 0;
+        }
+        100% {
+          top: 15%;
+          opacity: 1;
+        }
+      }
+      @keyframes slideUp {
+        0% {
+          top: 15%;
+          opacity: 1;
+        }
+        100% {
+          top: -100px;
+          opacity: 0;
+        }
+      }
+
+      /* Overlay background */
+      .modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0);
+        z-index: 999;
+      }
+
       .clock {
-        font-size: 6rem;
+        font-size: 4rem;
         font-weight: bold;
         color: #333;
-        background-color: #fff;
-        padding: 20px 40px;
-        border-radius: 10px;
-        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
       }
+
       .date {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
         text-align: center;
-        margin-top: 10px;
+        margin-bottom: 15px;
         color: #666;
       }
     </style>
   </head>
   <body>
-    <div class="container">
-      <div class="clock" id="clock">00:00:00</div>
-      <div class="date" id="date">Monday, January 1</div>
+    <div class="modal-overlay" id="overlay">
+      <div class="modal" id="clockModal">
+        <div class="clock" id="clock">00:00:00</div>
+        <div class="date" id="date">Monday, January 1</div>
+      </div>
     </div>
 
     <script>
@@ -61,7 +113,26 @@
           options
         );
       }
+      // Function to close modal
+      function closeModal() {
+        const modal = document.getElementById('clockModal');
+        const overlay = document.getElementById('overlay');
 
+        // Add the closing class to trigger the slide up animation
+        modal.classList.add('closing');
+
+        // Wait for animation to complete before hiding the overlay
+        setTimeout(() => {
+          overlay.style.display = 'none';
+        }, 500); // Match this timing with your animation duration
+      }
+
+      // Event listeners for click and key events
+      document.addEventListener('click', closeModal);
+      document.addEventListener('keydown', closeModal);
+
+      // Auto close after 5 seconds
+      setTimeout(closeModal, 5000);
       // Update clock immediately and then every second
       updateClock();
       setInterval(updateClock, 1000);
