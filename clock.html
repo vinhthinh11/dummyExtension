@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Digital Clock</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #f0f0f0;
+        font-family: Arial, sans-serif;
+      }
+      .clock {
+        font-size: 6rem;
+        font-weight: bold;
+        color: #333;
+        background-color: #fff;
+        padding: 20px 40px;
+        border-radius: 10px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      }
+      .date {
+        font-size: 1.5rem;
+        text-align: center;
+        margin-top: 10px;
+        color: #666;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="date" id="date">Monday, January 1</div>
+    </div>
+
+    <script>
+      function updateClock() {
+        const now = new Date();
+
+        // Update time
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+        document.getElementById(
+          'clock'
+        ).textContent = `${hours}:${minutes}:${seconds}`;
+
+        // Update date
+        const options = {
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        };
+        document.getElementById('date').textContent = now.toLocaleDateString(
+          undefined,
+          options
+        );
+      }
+
+      // Update clock immediately and then every second
+      updateClock();
+      setInterval(updateClock, 1000);
+    </script>
+  </body>
+</html>
